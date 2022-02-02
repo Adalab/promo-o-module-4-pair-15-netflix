@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const movies = require('./data/movies.json')
 
 // create and config server
 const server = express();
@@ -11,3 +12,13 @@ const serverPort = 4000;
 server.listen(serverPort, () => {
   console.log(`Server listening at http://localhost:${serverPort}`);
 });
+
+server.get("/movies", (req, res) => {
+  console.log('Peticion a la ruta GET /movies')
+  
+  movies = {
+    success: true,
+    
+  }
+  res.json(movies)
+})
