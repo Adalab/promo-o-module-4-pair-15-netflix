@@ -19,6 +19,8 @@ server.listen(serverPort, () => {
 const staticServerPath='./src/public-react';
 server.use(express.static(staticServerPath))
 
+
+
 server.get("/movies", (req, res) => {
   console.log('Peticion a la ruta GET /movies')
   console.log(req.query);
@@ -32,3 +34,7 @@ server.get("/movies", (req, res) => {
 
   res.json(filterGender.length === 0 ? movies: filterGender)
 })
+
+//IMAGENES
+const staticServerPathImages='./src/public-movies-images';
+server.use(express.static(staticServerPathImages))
