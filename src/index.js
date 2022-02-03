@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const movies = require('./data/movies.json')
+const users = require('./data/users.json')
 
 // create and config server
 const server = express();
@@ -33,6 +34,12 @@ server.get("/movies", (req, res) => {
   const filterGender = response.movies.filter(movie => movie.gender === req.query.gender);
 
   res.json(filterGender.length === 0 ? movies: filterGender)
+})
+
+server.post("/login", (req, res) => {
+  console.log('Peticion a la ruta LOGIN')
+  console.log(req.body)
+  
 })
 
 //IMAGENES
