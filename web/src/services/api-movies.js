@@ -8,30 +8,8 @@ const getMoviesFromApi = () => {
   })
   .then(response => response.json())
   .then(data => {
-     return data;
+     return console.log(data);
   });
-    /*.then(() => {
-      // CAMBIA EL CONTENIDO DE ESTE THEN PARA GESTIONAR LA RESPUESTA DEL SERVIDOR Y RETORNAR AL COMPONENTE APP LO QUE NECESITA
-      return {
-        success: true,
-        movies: [
-          {
-            id: '1',
-            title: 'Gambita de dama',
-            gender: 'Drama',
-            image:
-              '//beta.adalab.es/curso-intensivo-fullstack-recursos/apis/netflix-v1/images/gambito-de-dama.jpg'
-          },
-          {
-            id: '2',
-            title: 'Friends',
-            gender: 'Comedia',
-            image:
-              '//beta.adalab.es/curso-intensivo-fullstack-recursos/apis/netflix-v1/images/friends.jpg'
-          }
-        ]
-      };
-    });*/
 };
 
 const objToExport = {
