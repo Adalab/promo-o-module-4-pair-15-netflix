@@ -17,11 +17,13 @@ server.get("/movies", (req, res) => {
   console.log('Peticion a la ruta GET /movies')
   console.log(req)
   
+  
   const response = {
     success: true,
     movies: movies
     
   }
   const filterGender = response.movies.gender.filter(movie => movie.gender === req.query.gender);
-  res.json(response)
+
+  res.send(filterGender.length === 0 ? movies: filterGender)
 })
