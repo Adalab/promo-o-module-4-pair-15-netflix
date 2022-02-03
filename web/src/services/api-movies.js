@@ -9,7 +9,7 @@ const getMoviesFromApi = (params) => {
   })
   .then(response => response.json())
   .then(data => {
-     return console.log(data);
+     return data;
   });
     
 };
