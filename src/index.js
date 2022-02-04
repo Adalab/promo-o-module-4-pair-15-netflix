@@ -17,9 +17,12 @@ server.listen(serverPort, () => {
   console.log(`Server listening at http://localhost:${serverPort}`);
 });
 
-//Congifurar servidor de statics
-const staticServerPath = "./src/public-react";
-server.use(express.static(staticServerPath));
+
+
+// Endopoint para escuchar peticiones de las películas
+server.get("/movie/:movieId", (req, res) => {
+  console.log(req.params.movieId);
+});
 
 server.get("/movies", (req, res) => {
   console.log("Peticion a la ruta GET /movies");
@@ -36,6 +39,7 @@ server.get("/movies", (req, res) => {
   res.json(filterGender.length === 0 ? movies : filterGender);
 });
 
+// Login
 server.post("/login", (req, res) => {
   console.log("Peticion a la ruta LOGIN");
   console.log(req.body);
@@ -44,18 +48,18 @@ server.post("/login", (req, res) => {
   });
 
   const successfully = {
-    "success": true,
-    "userId": "id_de_la_usuaria_encontrada"
+    success: true,
+    userId: "id_de_la_usuaria_encontrada",
   };
 
   const unsuccessfully = {
-    "success": false,
-    "errorMessage": "Usuaria/o no encontrada/o"
+    success: false,
+    errorMessage: "Usuaria/o no encontrada/o",
   };
 
-  if(foundUser){
-  res.json(successfully);
-  } else{
+  if (foundUser) {
+    res.json(successfully);
+  } else {
     res.json(unsuccessfully);
   }
 });
@@ -63,3 +67,7 @@ server.post("/login", (req, res) => {
 //IMAGENES
 const staticServerPathImages = "./src/public-movies-images";
 server.use(express.static(staticServerPathImages));
+
+//Congifurar servidor de statics
+const staticServerPath = "./src/public-react";
+server.use(express.static(staticServerPath));
