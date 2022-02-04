@@ -22,11 +22,14 @@ server.listen(serverPort, () => {
 // Endopoint para escuchar peticiones de las películas
 server.get("/movie/:movieId", (req, res) => {
   console.log(req.params.movieId);
+  const foundMovie = movies.find(movie => {
+    return movie.id === req.params.movieId;
+  })
+  res.json(foundMovie);
 });
 
 server.get("/movies", (req, res) => {
   console.log("Peticion a la ruta GET /movies");
-  console.log(req.query);
 
   const response = {
     success: true,
@@ -42,7 +45,6 @@ server.get("/movies", (req, res) => {
 // Login
 server.post("/login", (req, res) => {
   console.log("Peticion a la ruta LOGIN");
-  console.log(req.body);
   const foundUser = users.find((user) => {
     return user.email === req.body.email && user.password === req.body.password;
   });
