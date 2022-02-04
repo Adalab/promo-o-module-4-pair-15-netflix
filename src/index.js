@@ -66,10 +66,15 @@ server.post("/login", (req, res) => {
   }
 });
 
-//IMAGENES
-const staticServerPathImages = "./src/public-movies-images";
-server.use(express.static(staticServerPathImages));
 
 //Congifurar servidor de statics
 const staticServerPath = "./src/public-react";
 server.use(express.static(staticServerPath));
+
+//IMAGENES
+const staticServerPathImages = "./src/public-movies-images";
+server.use(express.static(staticServerPathImages));
+
+// Styles
+const staticServerStyles = "./web/src/stylesheets/";
+server.use(express.static(staticServerStyles));
