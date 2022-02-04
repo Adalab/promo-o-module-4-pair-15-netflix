@@ -25,7 +25,7 @@ server.get("/movie/:movieId", (req, res) => {
   const foundMovie = movies.find(movie => {
     return movie.id === req.params.movieId;
   })
-  res.render('movie')
+  res.render('movie', foundMovie)
 });
 
 server.get("/movies", (req, res) => {
