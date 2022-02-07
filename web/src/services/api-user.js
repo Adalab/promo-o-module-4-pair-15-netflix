@@ -7,13 +7,11 @@ const sendLoginToApi = (data) => {
     method: "POST",
     body: JSON.stringify(data),
     headers: {
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   })
     .then((response) => response.json())
-    .then((data) => {
-      return data;
-    });
+    .then((data) => data);
 };
 
 // signup

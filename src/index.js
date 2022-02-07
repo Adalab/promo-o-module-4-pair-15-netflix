@@ -17,33 +17,42 @@ server.listen(serverPort, () => {
   console.log(`Server listening at http://localhost:${serverPort}`);
 });
 
-
-
 // Endopoint para escuchar peticiones de las películas
 server.get("/movie/:movieId", (req, res) => {
   console.log(req.params.movieId);
-  const foundMovie = movies.find(movie => {
+  const foundMovie = movies.find((movie) => {
     return movie.id === req.params.movieId;
-  })
-  res.render('movie', foundMovie)
+  });
+  res.render("movie", foundMovie);
 });
 
 server.get("/movies", (req, res) => {
   console.log("Peticion a la ruta GET /movies");
-
-  const response = {
+  console.log(req.query.gender);
+  /*const response = {
     success: true,
     movies: movies,
   };
   const filterGender = response.movies.filter(
     (movie) => movie.gender === req.query.gender
-  );
+  );*/
 
-  res.json(filterGender.length === 0 ? movies : filterGender);
+  const filterGender = 
+    movies.filter((movie) => movie.gender === req.query.gender);
+
+  const response = {
+    success: true,
+    movies: req.query.gender == "" ? movies : filterGender,
+  };
+
+  //res.json(filterGender.length === 0 ? movies : filterGender);
+
+  res.json(response);
 });
 
 // Login
 server.post("/login", (req, res) => {
+  console.log(req.body);
   console.log("Peticion a la ruta LOGIN");
   const foundUser = users.find((user) => {
     return user.email === req.body.email && user.password === req.body.password;
@@ -66,7 +75,6 @@ server.post("/login", (req, res) => {
   }
 });
 
-
 //Congifurar servidor de statics
 const staticServerPath = "./src/public-react";
 server.use(express.static(staticServerPath));
@@ -76,5 +84,5 @@ const staticServerPathImages = "./src/public-movies-images";
 server.use(express.static(staticServerPathImages));
 
 // Styles
-const staticServerStyles = "./web/src/stylesheets/";
+const staticServerStyles = "./src/public-styles";
 server.use(express.static(staticServerStyles));
