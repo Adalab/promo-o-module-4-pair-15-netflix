@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const Database = require("better-sqlite3");
 const movies = require("./data/movies.json");
 const users = require("./data/users.json");
 
@@ -7,6 +8,11 @@ const users = require("./data/users.json");
 const server = express();
 server.use(cors());
 server.use(express.json());
+
+// config database
+const db = new Database("./src/db/database.db", {
+  verbose: console.log,
+});
 
 // config engine templates
 server.set("view engine", "ejs");
@@ -17,34 +23,41 @@ server.listen(serverPort, () => {
   console.log(`Server listening at http://localhost:${serverPort}`);
 });
 
-
-
 // Endopoint para escuchar peticiones de las películas
 //Y crear motor de plantillas
 server.get("/movie/:movieId", (req, res) => {
   console.log(req.params.movieId);
-  const foundMovie = movies.find(movie => {
+
+  const foundMovie = movies.find((movie) => {
     return movie.id === req.params.movieId;
-  })
-  res.render('movie', foundMovie)
+  });
+  res.render("movie", foundMovie);
 });
 
 server.get("/movies", (req, res) => {
   console.log("Peticion a la ruta GET /movies");
+  console.log(req.query.gender);
+  const gender = req.query.gender;
+  const sort = req.query.sort;
+  const query = db.prepare("SELECT * FROM movies WHERE gender=? AND sort=?");
+  const allMovies = query.get(gender, sort);
+
+  // const filterGender = allMovies.filter(
+  //   (movie) => movie.gender === req.query.gender
+  // );
 
   const response = {
     success: true,
-    movies: movies,
+    // movies: req.query.gender == "" ? allMovies : filterGender,
+    movies: req.query.gender == "" ? allMovies : filterGender,
   };
-  const filterGender = response.movies.filter(
-    (movie) => movie.gender === req.query.gender
-  );
 
-  res.json(filterGender.length === 0 ? movies : filterGender);
+  res.json(response);
 });
 
 // Login
 server.post("/login", (req, res) => {
+  console.log(req.body);
   console.log("Peticion a la ruta LOGIN");
   const foundUser = users.find((user) => {
     return user.email === req.body.email && user.password === req.body.password;
@@ -67,7 +80,6 @@ server.post("/login", (req, res) => {
   }
 });
 
-
 //Congifurar servidor de statics
 const staticServerPath = "./src/public-react";
 server.use(express.static(staticServerPath));
@@ -77,5 +89,5 @@ const staticServerPathImages = "./src/public-movies-images";
 server.use(express.static(staticServerPathImages));
 
 // Styles
-const staticServerStyles = "./web/src/stylesheets/";
+const staticServerStyles = "./src/public-styles";
 server.use(express.static(staticServerStyles));
