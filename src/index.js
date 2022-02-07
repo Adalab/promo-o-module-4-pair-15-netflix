@@ -38,9 +38,8 @@ server.get("/movies", (req, res) => {
   console.log("Peticion a la ruta GET /movies");
   console.log(req.query.gender);
   const gender = req.query.gender;
-  const sort = req.query.sort;
-  const query = db.prepare("SELECT * FROM movies WHERE gender=? AND sort=?");
-  const allMovies = query.get(gender, sort);
+  const query = db.prepare("SELECT * FROM movies WHERE gender = ?");
+  const allMovies = query.all(gender);
 
   // const filterGender = allMovies.filter(
   //   (movie) => movie.gender === req.query.gender
@@ -48,13 +47,12 @@ server.get("/movies", (req, res) => {
 
   const response = {
     success: true,
-    // movies: req.query.gender == "" ? allMovies : filterGender,
-    movies: req.query.gender == "" ? allMovies : filterGender,
+    movies: req.query.gender == "" ? movies : allMovies,
+  
   };
 
   res.json(response);
 });
-
 // Login
 server.post("/login", (req, res) => {
   console.log(req.body);
