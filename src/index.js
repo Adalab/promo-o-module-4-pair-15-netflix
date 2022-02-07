@@ -20,6 +20,7 @@ server.listen(serverPort, () => {
 
 
 // Endopoint para escuchar peticiones de las películas
+//Y crear motor de plantillas
 server.get("/movie/:movieId", (req, res) => {
   console.log(req.params.movieId);
   const foundMovie = movies.find(movie => {
