@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const Database = require("better-sqlite3");
-const movies = require("./data/movies.json");
 const users = require("./data/users.json");
 
 // create and config server
@@ -27,11 +26,10 @@ server.listen(serverPort, () => {
 //Y crear motor de plantillas
 server.get("/movie/:movieId", (req, res) => {
   console.log(req.params.movieId);
+  const query = db.prepare("SELECT * FROM movies WHERE id = ?")
+  const idMovies = query.get(req.params.movieId)
 
-  const foundMovie = movies.find((movie) => {
-    return movie.id === req.params.movieId;
-  });
-  res.render("movie", foundMovie);
+  res.render("movie", idMovies);
 });
 
 server.get("/movies", (req, res) => {
@@ -41,10 +39,7 @@ server.get("/movies", (req, res) => {
   const query = db.prepare("SELECT * FROM movies WHERE gender = ?");
   const allMovies = query.all(gender);
 
-  // const filterGender = allMovies.filter(
-  //   (movie) => movie.gender === req.query.gender
-  // );
-
+ 
   const response = {
     success: true,
     movies: req.query.gender == "" ? movies : allMovies,
