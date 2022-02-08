@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const Database = require("better-sqlite3");
 const users = require("./data/users.json");
+const movies = require('./data/movies.json')
 
 // create and config server
 const server = express();
@@ -36,13 +37,15 @@ server.get("/movies", (req, res) => {
   console.log("Peticion a la ruta GET /movies");
   console.log(req.query.gender);
   const gender = req.query.gender;
+  
   const query = db.prepare("SELECT * FROM movies WHERE gender = ?");
   const allMovies = query.all(gender);
+ 
 
  
   const response = {
     success: true,
-    movies: req.query.gender == "" ? movies : allMovies,
+    movies: req.query.gender === "" ? movies : allMovies,
   
   };
 
@@ -52,9 +55,13 @@ server.get("/movies", (req, res) => {
 server.post("/login", (req, res) => {
   console.log(req.body);
   console.log("Peticion a la ruta LOGIN");
-  const foundUser = users.find((user) => {
+  const email = req.body.email;
+  const password =req.body.password
+  const query = db.prepare("SELECT * FROM users WHERE email = ? and password = ?");
+  const getUser = query.get(email, password);
+  /*const foundUser = users.find((user) => {
     return user.email === req.body.email && user.password === req.body.password;
-  });
+  });*/
 
   const successfully = {
     success: true,
@@ -66,7 +73,7 @@ server.post("/login", (req, res) => {
     errorMessage: "Usuaria/o no encontrada/o",
   };
 
-  if (foundUser) {
+  if (getUser) {
     res.json(successfully);
   } else {
     res.json(unsuccessfully);
