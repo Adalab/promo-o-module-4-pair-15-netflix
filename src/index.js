@@ -3,6 +3,7 @@ const cors = require("cors");
 const Database = require("better-sqlite3");
 const users = require("./data/users.json");
 const movies = require("./data/movies.json");
+const { query } = require("express");
 
 // create and config server
 const server = express();
@@ -94,14 +95,27 @@ server.post("/signup", (req, res) => {
       success: true,
       userId: addUser.lastInsertRowid,
     });
-  } else{
+  } else {
     res.json({
       success: false,
       message: "el usuario ya existe",
-    })
+    });
   }
 });
 
+//mis peliculas 
+server.get("/user/movies", (req, res) => {
+ 
+  const movieIdsQuery = query.prepare(
+    "SELECT movieId FROM rel_movies_users WHERE userId = ? "
+  )
+  const movieIds = movieIdsQuery.all(req.headers("user-id"));
+  console.log(req.headers.user-id)
+  res.json({
+    success: true,
+    movies: [],
+  });
+});
 //Congifurar servidor de statics
 const staticServerPath = "./src/public-react";
 server.use(express.static(staticServerPath));
